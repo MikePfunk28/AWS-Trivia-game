@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Trivia Quest</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <link rel="stylesheet" href="/styles/game.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        #ascii-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: white; /* ASCII color */
+            white-space: pre; /* Preserve whitespace */
+            font-size: 12px; /* Adjust font size as needed */
+            z-index: -1; /* Send background behind the canvas */
+        }
+
+        #ascii-background2 {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 550%;
+            height: 550%;
+            color: white; /* ASCII color */
+            white-space: pre; /* Preserve whitespace */
+            font-size: 12px; /* Adjust font size as needed */
+            z-index: -1; /* Send background behind the canvas */
+        }
+
+        #game {
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+        }
+
+        #pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            display: none;
+            z-index: 2;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .game-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #start-button {
+            top: 20px;
+            right: 100px;
+        }
+        #reset-button {
+            top: 20px;
+            right: 20px;
+        }
+
+        #game-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5; /* Phaser's canvas */
+        }
+
+        /* Your custom gameCanvas */
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10; /* On top of Phaser's canvas */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ascii-background">
+        <pre>
+              .--.
+             |o_o |
+             |:_/ |
+            //   \ \
+           (|     | )
+          /'\_   _/`\
+          \___)=(___/
+            </pre>
+    </div>
+    <div class="game-container">
+        <div id="game"></div>
+    </div>
+    <!-- Add Start and Reset Buttons -->
+    <button id="start-button" class="game-button">Start</button>
+    <button id="reset-button" class="game-button">Reset</button>
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

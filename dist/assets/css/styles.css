@@ -1,0 +1,9 @@
+body,html {
+    margin: 5px 5px 5px 5px;
+    position: relative;
+    background-color: #008080;
+}
+canvas {
+    margin: auto;
+    padding: 5px 5px 5px 5px;
+}
