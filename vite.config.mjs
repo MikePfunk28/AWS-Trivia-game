@@ -9,18 +9,32 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd());
 
     return {
+        base: './', // Updated base URL
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, './src'), // Alias for src directory
                 'gameobjects': path.resolve(__dirname, './src/gameobjects'),
                 'scenes': path.resolve(__dirname, './src/scenes'),
-                'utils': path.resolve(__dirname, './src/utils')
+                'utils': path.resolve(__dirname, './src/utils'),
+                'phaser': 'phaser/dist/phaser.min.js' // Updated alias for phaser
             }
         },
-        base: env.VITE_BASE_URL || '/', // Base URL for the application, can be set in .env files
+        server: {
+            port: 8082, // Updated port for the development server
+            host: true, // Updated host configuration
+            open: true, // Automatically open the browser when the server starts
+            hmr: {
+                overlay: true // Show overlay for HMR errors
+            }
+        },
         build: {
             outDir: 'dist', // Output directory for production builds
+            assetsDir: 'assets', // Updated assets directory
+            emptyOutDir: true, // Empty output directory before building
             rollupOptions: {
+                input: {
+                    main: './index.html' // Updated input file for rollup
+                },
                 output: {
                     manualChunks: {
                         phaser: ['phaser'] // Manual chunking for the phaser library
@@ -38,13 +52,7 @@ export default defineConfig(({ mode }) => {
                 }
             }
         },
-        server: {
-            port: 8080, // Port for the development server
-            open: true, // Automatically open the browser when the server starts
-            hmr: {
-                overlay: true // Show overlay for HMR errors
-            }
-        },
+        publicDir: 'public', // Updated public directory
         // Additional configurations can go here
     };
 });

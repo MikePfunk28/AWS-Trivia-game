@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite'; // Importing the defineConfig function from Vite
-import path from 'path'; // Importing the path module from Node.js
+import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src'), // This sets '@' to point to the 'src' directory
+            '@': path.resolve(__dirname, './src'),
             'gameobjects': path.resolve(__dirname, './src/gameobjects'),
             'scenes': path.resolve(__dirname, './src/scenes'),
             'utils': path.resolve(__dirname, './src/utils'),
@@ -12,12 +12,19 @@ export default defineConfig({
         }
     },
     base: '/assets/',
+    define: {
+        global: 'globalThis',
+        'process.env': process.env
+    },
+    optimizeDeps: {
+        include: ['phaser']
+    },
     build: {
         sourcemap: true,
         rollupOptions: {
             output: {
-                manualChunks: {
-                    phaser: ['phaser']
+                globals: {
+                    phaser: 'Phaser'
                 }
             }
         }
@@ -29,8 +36,5 @@ export default defineConfig({
         hmr: {
             overlay: true
         }
-    },
-    optimizeDeps: {
-        exclude: ['phaser']
     }
 });

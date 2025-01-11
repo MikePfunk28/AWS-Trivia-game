@@ -1,3 +1,5 @@
+import * as Phaser from 'phaser';
+
 export default class Icon extends Phaser.GameObjects.Rectangle {
     constructor(scene, x, y) {
         super(scene, x, y, 32, 32, 0x00ff00); // Green rectangle for visibility

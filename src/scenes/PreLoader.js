@@ -1,9 +1,10 @@
 import { getAssetPath } from "/src/utils/assetLoader";
 import Player from '/src/gameobjects/player';
 import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
+import * as Phaser from 'phaser';
 import SceneOrderManager from '/src/utils/SceneOrderManager';
-export default class Preloader extends Scene {
+
+export default class Preloader extends Phaser.Scene {
     constructor() {
         super({ key: 'preloader' });
         // Initialization code
@@ -50,4 +51,3 @@ export default class Preloader extends Scene {
 
     // ... rest of your Preloader class methods
 }
-

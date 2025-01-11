@@ -1,12 +1,13 @@
 import { getAssetPath } from "/src/utils/assetLoader";
 import Player from '/src/gameobjects/player';
 import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
+// Phaser is loaded globally from CDN
 import SceneOrderManager from '/src/utils/SceneOrderManager';
 
 export default class Map3GameScene3 extends Phaser.Scene {
     constructor() {
         super({ key: 'map3_game3' });
+        console.log('Map3GameScene3: Initializing');
         this.player = null;
         this.score = 0;
         this.scoreText = null;

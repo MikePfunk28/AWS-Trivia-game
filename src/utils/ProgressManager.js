@@ -1,8 +1,8 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "../utils/assetLoader";
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from 'phaser';
+import SceneOrderManager from '../utils/SceneOrderManager';
 
 export default class ProgressManager {
     constructor() {
@@ -29,6 +29,11 @@ export default class ProgressManager {
         this.stats.bulletSpeed = 400 + Math.floor(this.stats.score / 500) * 50;
         this.stats.multiShot = 1 + Math.floor(this.stats.score / 2000);
 
+        // Save progress
         localStorage.setItem('gameProgress', JSON.stringify(this.stats));
+    }
+
+    getStats() {
+        return this.stats;
     }
 }

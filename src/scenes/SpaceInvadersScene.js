@@ -1,8 +1,10 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "../utils/assetLoader";
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from 'phaser';
+import SceneOrderManager from '../utils/SceneOrderManager';
+import ProgressManager from '../utils/ProgressManager';
+
 
 
 export default class SpaceInvadersScene extends Phaser.Scene {
@@ -499,4 +501,17 @@ export default class SpaceInvadersScene extends Phaser.Scene {
             }
         });
     }
-} 
+
+    gameOver() {
+        this.playSound('gameOver');
+        alert(`Game Over!\nYour Score: ${this.score}`);
+        this.resetGame();
+        // Return to the sort selection scene to start the sorting
+        const sortScene = this.scene.get('sort_selection');
+        const algorithm = sortScene.currentSortAlgorithm;
+        
+        // Start the sorting animation
+        this.scene.start('sort_selection');
+        sortScene.startSortingAnimation(algorithm);
+    }
+}

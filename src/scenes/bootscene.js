@@ -1,16 +1,25 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "../utils/assetLoader";
+import * as Phaser from 'phaser';
 
 export default class BootScene extends Phaser.Scene {
     constructor() {
         super({ key: 'bootscene' });
-        const asciiBackground = document.getElementById('ascii-background');
-        const asciiBackground2 = document.getElementById('/public/assets/images/ASCII-Art-Night-Sky.txt');
-        const asciiText = asciiBackground.textContent;
-        console.log(asciiText);
+        this.ascii = `
+        *     *        .     *       .     *     .     *
+         .       .      .     #       .           .
+            .      *           .-+- .         *  .    '
+                   .   #     .-'   '-.       .
+         *  .        .     .'         '.        *    .
+         -+-      *      /   .   .   .   \\    .    .
+      .  /|\\            /   .     .     .   \\      #
+         /|\\           /   /   .     .     \\   \\    .
+        /|\\          /   /   /   .     \\   \\   \\
+       /||o\\     |  /   /   /   /   \\   \\   \\   \\  |
+      /o|||\\    |  .   /   /   /   \\   \\   \\   .  |
+     /||o||\\    |  |   .   /   /   \\   \\   .   |  |
+    /o||o||\\    |  |   |   .   /   \\   .   |   |  |
+   /||o||o|\\    |  |   |   |   .   .   |   |   |  |
+        `;
     }
 
     init(data) {
@@ -18,85 +27,145 @@ export default class BootScene extends Phaser.Scene {
     }
 
     preload() {
-        // Load assets
-        this.load.image('map1scene1', getAssetPath('images/map1scene1.png'));
-        this.load.json('map-config', getAssetPath('data/map1/map-config.json'));
-        this.load.json('questions', getAssetPath('data/questions.json'));
+        // Load button assets - using absolute path
+        this.load.image('button', getAssetPath('public/images/button.png'));
+        
+        // Load other assets
+        this.load.image('map1scene1', getAssetPath('public/images/map1scene1.png'));
+        this.load.json('map-config', getAssetPath('public/data/map1/map-config.json'));
+        this.load.json('questions', getAssetPath('public/data/questions.json'));
         this.load.bitmapFont('arcade',
-            getAssetPath('fonts/arcade.png'),
-            getAssetPath('fonts/arcade.xml')
+            getAssetPath('public/fonts/arcade.png'),
+            getAssetPath('public/fonts/arcade.xml')
         );
 
         // Load feedback marks
-        this.load.image('checkMark', getAssetPath('images/checkmark.png'));
-        this.load.image('xMark', getAssetPath('images/xmark.png'));
+        this.load.image('checkMark', getAssetPath('public/images/checkmark.png'));
+        this.load.image('xMark', getAssetPath('public/images/xmark.png'));
     }
 
     create() {
-        // Initialize sound settings properly
-        if (this.sound && this.sound.context) {
-            this.sound.pauseOnBlur = false;
-        }
-        this.add.text(100, 100, 'Welcome to AWS Trivia Game!')
-        this.questions = this.cache.json.get('questions');
+        // Set background color to black
+        this.cameras.main.setBackgroundColor('#000000');
 
+        // Add ASCII art background
+        const asciiText = this.add.text(400, 300, this.ascii, {
+            font: '12px monospace',
+            fill: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
         
-        const helloButton = this.add.text(100, 100, 'Hello Phaser!', { fill: '#0f0' });
-        helloButton.setInteractive();
-        helloButton.on('pointerover', () => { console.log('pointerover'); });
-        helloButton.on('pointerout', () => { console.log('pointerout'); });
-        helloButton.on('pointerdown', () => { console.log('pointerdown'); });
-        helloButton.on('pointerup', () => { console.log('pointerup'); });
+        // Add welcome text
+        this.add.text(400, 150, 'Welcome to AWS Trivia Game!', {
+            fill: '#fff',
+            fontSize: '32px'
+        }).setOrigin(0.5);
 
-        const startButton = this.add.text(100, 100, 'Start!', { fill: '#fff' });
-        startButton.setInteractive();
-        startButton.on('pointerover', () => { console.log('pointerover'); });
-        startButton.on('pointerout', () => { console.log('pointerout'); });
-        startButton.on('pointerdown', () => { console.log('pointerdown'); });
-        startButton.on('pointerup', () => { console.log('pointerup'); });
+        // Add description text
+        this.add.text(400, 220, 'Learn AWS while exploring data structures\nand sorting algorithms!', {
+            fill: '#fff',
+            fontSize: '20px',
+            align: 'center'
+        }).setOrigin(0.5);
 
-        const resetButton = this.add.text(100, 100, 'Reset!', { fill: '#fff' });
-        resetButton.setInteractive();
-        resetButton.on('pointerover', () => { console.log('pointerover'); });
-        resetButton.on('pointerout', () => { console.log('pointerout'); });
-        resetButton.on('pointerdown', () => { console.log('pointerdown'); });
-        resetButton.on('pointerup', () => { console.log('pointerup'); });
+        // Create green rectangle as fallback if button image fails to load
+        const buttonBg = this.add.rectangle(400, 300, 200, 50, 0x00ff00);
+        buttonBg.setInteractive({ useHandCursor: true });
 
+        // Create Start button sprite on top of rectangle
+        const startButton = this.add.sprite(400, 300, 'button');
+        if (startButton.texture.key === '__MISSING') {
+            // If button texture failed to load, hide the sprite
+            startButton.setVisible(false);
+        } else {
+            // If button texture loaded, hide the rectangle and setup the sprite
+            buttonBg.setVisible(false);
+            startButton.setScale(0.5);
+            startButton.setInteractive({ useHandCursor: true });
+        }
+        
+        // Add button text
+        const buttonText = this.add.text(400, 300, 'Start Game', {
+            fontSize: '24px',
+            fill: '#000000',
+            fontWeight: 'bold'
+        }).setOrigin(0.5);
 
-        const mapConfig = this.cache.json.get('map-config'); // Ensure correct key
+        // Add hover effects to both button and fallback
+        buttonBg.on('pointerover', () => {
+            buttonBg.setFillStyle(0x66ff66);
+            buttonText.setStyle({ fill: '#ffffff' });
+        });
+        
+        buttonBg.on('pointerout', () => {
+            buttonBg.setFillStyle(0x00ff00);
+            buttonText.setStyle({ fill: '#000000' });
+        });
+        
+        startButton.on('pointerover', () => {
+            startButton.setTint(0x66ff66);
+            buttonText.setStyle({ fill: '#ffffff' });
+        });
+        
+        startButton.on('pointerout', () => {
+            startButton.clearTint();
+            buttonText.setStyle({ fill: '#000000' });
+        });
+        
+        // Add click handlers to both
+        const startGame = () => {
+            console.log('Starting game...');
+            this.scene.start('sort_selection', { score: 0 });
+        };
+        
+        buttonBg.on('pointerup', startGame);
+        startButton.on('pointerup', startGame);
 
-        const asciiArt = `
-        *     *        .     *       .     *     .     *
-     *        .     *     *     .     *     .     *     .
-        *     *        .     *       .     *     .     *
-     *        .     *     *     .     *     .     *     .
-        *     *        .     *       .     *     .     *
-        `;
+        // Add back button (using same pattern)
+        const backBg = this.add.rectangle(100, 50, 100, 30, 0x00ff00);
+        backBg.setInteractive({ useHandCursor: true });
 
-        this.add.text(550, 550, asciiArt, { font: '12px monospace', fill: '#ffffff' });
+        const backButton = this.add.sprite(100, 50, 'button');
+        if (backButton.texture.key === '__MISSING') {
+            backButton.setVisible(false);
+        } else {
+            backBg.setVisible(false);
+            backButton.setScale(0.3);
+            backButton.setInteractive({ useHandCursor: true });
+        }
 
-        // Set up the map based on config
-        const activeZone = mapConfig.zones[0];
-        const map = this.add.image(activeZone.x, activeZone.y, 'map1scene1');
-        map.setScale(activeZone.scale);
+        const backText = this.add.text(100, 50, 'Back', {
+            fontSize: '20px',
+            fill: '#000000',
+            fontWeight: 'bold'
+        }).setOrigin(0.5);
 
-        // Load AWS icons after we have the config
-        this.loadAwsIcons(mapConfig);
-        this.setupScore();
+        backBg.on('pointerover', () => {
+            backBg.setFillStyle(0x66ff66);
+            backText.setStyle({ fill: '#ffffff' });
+        });
 
+        backBg.on('pointerout', () => {
+            backBg.setFillStyle(0x00ff00);
+            backText.setStyle({ fill: '#000000' });
+        });
+
+        backButton.on('pointerover', () => {
+            backButton.setTint(0x66ff66);
+            backText.setStyle({ fill: '#ffffff' });
+        });
+
+        backButton.on('pointerout', () => {
+            backButton.clearTint();
+            backText.setStyle({ fill: '#000000' });
+        });
+
+        const goBack = () => {
+            console.log('Going back...');
+            this.scene.start('bootscene');
+        };
+
+        backBg.on('pointerup', goBack);
+        backButton.on('pointerup', goBack);
     }
-
-    startGame() {
-        // Logic to start the game
-        this.scene.start('SpaceInvaderScene'); // Transition to the main game scene
-
-    }
-
-    resetGame() {
-        // Logic to reset the game
-        // You can reload the scene or reset game variables here
-        this.scene.restart(); // Restart the current scene
-    }
-
-    // ... rest of your BootScene class methods
 }

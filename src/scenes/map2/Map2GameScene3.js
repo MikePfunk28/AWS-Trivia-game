@@ -1,7 +1,7 @@
 import { getAssetPath } from "/src/utils/assetLoader";
 import Player from '/src/gameobjects/player';
 import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
+import * as Phaser from 'phaser';
 import SceneOrderManager from '/src/utils/SceneOrderManager';
 
 export default class Map2GameScene3 extends Phaser.Scene {

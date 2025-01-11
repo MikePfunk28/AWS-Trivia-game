@@ -1,6 +1,6 @@
 // src/gameobjects/Generator.js
 
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import Icon from "./icons";
 import Player from "./player";
 

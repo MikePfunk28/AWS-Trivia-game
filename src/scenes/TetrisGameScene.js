@@ -1,5 +1,9 @@
 // TetrisScene.js
-import Phaser from 'phaser';
+import { getAssetPath } from "/src/utils/assetLoader";
+import Player from '/src/gameobjects/player';
+import Generator from '/src/gameobjects/generator';
+import * as Phaser from 'phaser';
+import SceneOrderManager from '/src/utils/SceneOrderManager';
 
 export default class TetrisScene extends Phaser.Scene {
     constructor() {
@@ -329,12 +333,6 @@ export default class TetrisScene extends Phaser.Scene {
         }
     }
 
-    gameOver() {
-        this.playSound('gameOver');
-        alert(`Game Over!\nYour Score: ${this.score}`);
-        this.resetGame();
-    }
-
     resetGame() {
         this.board = this.createBoard();
         this.score = 0;
@@ -413,4 +411,18 @@ export default class TetrisScene extends Phaser.Scene {
             sound.play();
         }
     }
+
+    gameOver() {
+        this.playSound('gameOver');
+        alert(`Game Over!\nYour Score: ${this.score}`);
+        this.resetGame();
+        // Return to the sort selection scene to start the sorting
+        const sortScene = this.scene.get('sort_selection');
+        const algorithm = sortScene.currentSortAlgorithm;
+        
+        // Start the sorting animation
+        this.scene.start('sort_selection');
+        sortScene.startSortingAnimation(algorithm);
+    }
+
 }

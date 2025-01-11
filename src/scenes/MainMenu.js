@@ -1,10 +1,10 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "../utils/assetLoader";
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from 'phaser';
+import SceneOrderManager from '../utils/SceneOrderManager';
 
-export class MainMenu extends Scene {
+export class MainMenu extends Phaser.Scene {
     constructor() {
         super('MainMenu');
     }

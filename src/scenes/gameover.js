@@ -1,68 +1,62 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "../utils/assetLoader";
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from '../../node_modules/phaser/dist/phaser.min.js';
+import SceneOrderManager from '../utils/SceneOrderManager';
 
-export default class gameover extends Phaser.Scene {
-  constructor() {
-    super({ key: "gameover" });
-  }
+export default class GameOver extends Phaser.Scene {
+    constructor() {
+        super({ key: 'gameover' });
+    }
 
-  create() {
-    this.width = this.sys.game.config.width;
-    this.height = this.sys.game.config.height;
-    this.center_width = this.width / 2;
-    this.center_height = this.height / 2;
+    init(data) {
+        this.score = data.score || 0;
+    }
 
-    this.cameras.main.setBackgroundColor(0x87ceeb);
+    create() {
+        // Game Over text
+        this.add.text(400, 200, 'Game Over', {
+            fontSize: '64px',
+            fill: '#fff'
+        }).setOrigin(0.5);
 
-    this.add
-      .bitmapText(
-        this.center_width,
-        50,
-        "arcade",
-        this.registry.get("score"),
-        25
-      )
-      .setOrigin(0.5);
-    this.add
-      .bitmapText(
-        this.center_width,
-        this.center_height,
-        "arcade",
-        "GAME OVER",
-        45
-      )
-      .setOrigin(0.5);
-    this.add
-      .bitmapText(
-        this.center_width,
-        250,
-        "arcade",
-        "Press SPACE or Click to restart!",
-        15
-      )
-      .setOrigin(0.5);
-    this.input.keyboard.on("keydown-SPACE", this.startGame, this);
-    this.input.on("pointerdown", (pointer) => this.startGame(), this);
-  }
+        // Score text
+        this.add.text(400, 300, `Score: ${this.score}`, {
+            fontSize: '32px',
+            fill: '#fff'
+        }).setOrigin(0.5);
 
-  showLine(text, y) {
-    let line = this.introLayer.add(
-      this.add
-        .bitmapText(this.center_width, y, "pixelFont", text, 25)
-        .setOrigin(0.5)
-        .setAlpha(0)
-    );
-    this.tweens.add({
-      targets: line,
-      duration: 2000,
-      alpha: 1,
-    });
-  }
+        // Create Start/Reset button using button.png
+        const startButton = this.add.sprite(400, 400, 'button');
+        startButton.setScale(0.5);
+        startButton.setInteractive({ useHandCursor: true });
 
-  startGame() {
-    this.scene.start("map4_game4");
-  }
+        // Add white text overlay
+        const buttonText = this.add.text(400, 400, 'Start/Reset', {
+            fontSize: '24px',
+            fill: '#ffffff',
+            fontWeight: 'bold'
+        }).setOrigin(0.5);
+
+        // Add hover effects
+        startButton.on('pointerover', () => {
+            startButton.setTint(0x66ff66); // Light green tint
+            buttonText.setStyle({ fill: '#ffffff' });
+        });
+        
+        startButton.on('pointerout', () => {
+            startButton.clearTint();
+            buttonText.setStyle({ fill: '#ffffff' });
+        });
+        
+        // Add click handler for both Start and Reset functionality
+        startButton.on('pointerup', () => {
+            // Reset game state
+            this.registry.set('score', 0);
+            localStorage.removeItem('gameProgress');
+            
+            // Start fresh game
+            this.scene.start('bootscene', { score: 0 });
+        });
+    }
 }

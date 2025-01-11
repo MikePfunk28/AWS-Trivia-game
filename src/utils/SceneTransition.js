@@ -1,8 +1,8 @@
-import { getAssetPath } from "/src/utils/assetLoader";
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
-import SceneOrderManager from '/src/utils/SceneOrderManager';
+import { getAssetPath } from "./assetLoader";
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from 'phaser';
+import SceneOrderManager from './SceneOrderManager';
 
 export default class SceneTransition {
     static to(currentScene, nextSceneName, data = {}) {

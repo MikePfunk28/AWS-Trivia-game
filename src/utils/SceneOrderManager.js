@@ -1,6 +1,6 @@
-import Player from '/src/gameobjects/player';
-import Generator from '/src/gameobjects/generator';
-import Phaser, { Scene } from 'phaser'; // Default import
+import Player from '../gameobjects/player';
+import Generator from '../gameobjects/generator';
+import * as Phaser from 'phaser'; // Default import
 
 
 class Node {
