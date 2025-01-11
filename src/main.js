@@ -1,4 +1,5 @@
-import Phaser from 'phaser';
+const Phaser = require('phaser.js');
+
 import BootScene from "./scenes/bootscene";
 import GameOver from "./scenes/gameover";
 import GameScene from "./scenes/map1/GameScene";
@@ -51,8 +52,7 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [
-        SceneTester,  // Add scene tester first
+    scene: [ // Add scene tester first
         TestScene,
         BootScene,
         MainMenu,
@@ -87,3 +87,8 @@ console.log('Main: Game instance created');
 
 // Start with scene tester
 game.scene.start('scenetester');
+
+// Export the game instance
+export default game;
+
+console.log('Main: Game initialization complete');
