@@ -23,7 +23,7 @@
     "preview": "vite preview --config vite/config.prod.mjs"
   },
   "devDependencies": {
-    "vite": "^6.0.7"
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "phaser": "3.87.0",
